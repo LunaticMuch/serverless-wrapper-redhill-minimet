@@ -2,7 +2,6 @@
   "repository": "https://github.com/LunaticMuch/serverless-wrapper-redhill-minimet",
   "license": "MIT",
   "private": true,
-  "type": "module",
   "devDependencies": {
     "@types/node": "22.13.0",
     "@vercel/node": "^2.15.10",
