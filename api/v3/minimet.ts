@@ -59,16 +59,16 @@ function metarParser(minimetRaw: any): IMininetMetar {
       return null;
     }).filter((layer) => layer !== null),
     windSpeed:
-      minimetRaw.reports.metarReport.arrivalAtis.wind.wind2Min.averageWindSpeed.toString(),
+      minimetRaw.reports.metarReport.arrivalAtis.wind.wind2Min.averageWindSpeed?.toString(),
     windDirection:
       minimetRaw.reports.metarReport.arrivalAtis.wind.wind2Min
-        .averageWindDirection.toString(),
+        .averageWindDirection?.toString(),
     windBetweenFrom:
       minimetRaw.reports.metarReport.arrivalAtis.wind.wind2Min
-        .minimumWindDirection.toString(),
+        .minimumWindDirection?.toString(),
     windBetweenTo:
       minimetRaw.reports.metarReport.arrivalAtis.wind.wind2Min
-        .maximumWindDirection.toString(),
+        .maximumWindDirection?.toString(),
     isWindVariable:
       minimetRaw.reports.metarReport.arrivalAtis.wind.wind2Min.isVrb,
   };
