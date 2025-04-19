@@ -47,7 +47,7 @@ function metarParser(minimetRaw: any): IMininetMetar {
     runway: minimetRaw.reports.metarReport.arrivalAtis.runway,
     temperature: minimetRaw.reports.metarReport.temperature.temperature.toString(),
     dewPoint: minimetRaw.reports.metarReport.temperature.dewPoint.toString(),
-    visibility: minimetRaw.reports.metarReport.visibility.visibility.toString(),
+    visibility: minimetRaw.reports.metarReport.visibility.visibility?.toString() || "9999",
     clouds: CLOUDLAYERS.map((layer) => {
       if (minimetRaw.reports.metarReport.cloud[layer].type !== null) {
         return {
@@ -92,6 +92,7 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(200).json(metarParser(data));
     })
     .catch((err) => {
+      console.error("Error fetching minimet data:", err);
       return res.status(500).json({ error: err });
     });
 }
