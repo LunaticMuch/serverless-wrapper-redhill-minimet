@@ -30,11 +30,17 @@ interface IMininetMetar {
   windSpeed: string;
   windDirection: string | null;
   isWindVariable: boolean;
+  isWindGust: boolean;
   windBetweenFrom: string | null;
   windBetweenTo: string | null;
 }
 
 function metarParser(minimetRaw: any): IMininetMetar {
+  const minimumWindDirection = minimetRaw.reports.metarReport.arrivalAtis.wind.wind2Min.minimumWindDirection ??  0
+  const maximumWindDirection = minimetRaw.reports.metarReport.arrivalAtis.wind.wind2Min.maximumWindDirection ?? 0
+  const averageWindSpeed = minimetRaw.reports.metarReport.arrivalAtis.wind.wind2Min.averageWindSpeed ?? 0
+  const maximumWindSpeed = minimetRaw.reports.metarReport.arrivalAtis.wind.wind2Min.maximumWindSpeed ?? 0
+
   const sanitezedMetar = {
     site: minimetRaw.siteId,
     isCavok: minimetRaw.reports.metarReport.cavok,
@@ -59,18 +65,18 @@ function metarParser(minimetRaw: any): IMininetMetar {
       return null;
     }).filter((layer) => layer !== null),
     windSpeed:
-      minimetRaw.reports.metarReport.arrivalAtis.wind.wind2Min.averageWindSpeed?.toString(),
+      averageWindSpeed?.toString(),
+    windGust:
+      maximumWindSpeed?.toString(),
     windDirection:
       minimetRaw.reports.metarReport.arrivalAtis.wind.wind2Min
         .averageWindDirection?.toString(),
     windBetweenFrom:
-      minimetRaw.reports.metarReport.arrivalAtis.wind.wind2Min
-        .minimumWindDirection?.toString(),
+      minimumWindDirection.toString(),
     windBetweenTo:
-      minimetRaw.reports.metarReport.arrivalAtis.wind.wind2Min
-        .maximumWindDirection?.toString(),
-    isWindVariable:
-      minimetRaw.reports.metarReport.arrivalAtis.wind.wind2Min.isVrb,
+      maximumWindDirection.toString(),
+    isWindVariable: maximumWindDirection - minimumWindDirection > 59 ? true : false,
+    isWindGust: maximumWindSpeed - averageWindSpeed > 9 ? true : false,
   };
   return sanitezedMetar;
 }
