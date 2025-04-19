@@ -30,7 +30,7 @@ interface IMininetMetar {
   windSpeed: string;
   windDirection: string | null;
   isWindVariable: boolean;
-  isWindGust: boolean;
+  isWindGusting: boolean;
   windBetweenFrom: string | null;
   windBetweenTo: string | null;
 }
@@ -76,7 +76,7 @@ function metarParser(minimetRaw: any): IMininetMetar {
     windBetweenTo:
       maximumWindDirection.toString(),
     isWindVariable: maximumWindDirection - minimumWindDirection > 59 ? true : false,
-    isWindGust: maximumWindSpeed - averageWindSpeed > 9 ? true : false,
+    isWindGusting: maximumWindSpeed - averageWindSpeed > 9 ? true : false,
   };
   return sanitezedMetar;
 }
