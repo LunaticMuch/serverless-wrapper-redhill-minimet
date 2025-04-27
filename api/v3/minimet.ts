@@ -28,18 +28,28 @@ interface IMininetMetar {
   visibility: string;
   clouds?: ICloud[];
   windSpeed: string;
-  windDirection: string | null;
+  windDirection: string;
   isWindVariable: boolean;
   isWindGusting: boolean;
+  isWindVarialeBetween: boolean;
   windBetweenFrom: string | null;
   windBetweenTo: string | null;
+  windGust: string | null;
 }
 
 function metarParser(minimetRaw: any): IMininetMetar {
-  const minimumWindDirection = minimetRaw.reports.metarReport.arrivalAtis.wind.wind2Min.minimumWindDirection ??  0
-  const maximumWindDirection = minimetRaw.reports.metarReport.arrivalAtis.wind.wind2Min.maximumWindDirection ?? 0
-  const averageWindSpeed = minimetRaw.reports.metarReport.arrivalAtis.wind.wind2Min.averageWindSpeed ?? 0
-  const maximumWindSpeed = minimetRaw.reports.metarReport.arrivalAtis.wind.wind2Min.maximumWindSpeed ?? 0
+  const minimumWindDirection =
+    minimetRaw.reports.metarReport.arrivalAtis.wind.wind2Min
+      .minimumWindDirection ?? 0;
+  const maximumWindDirection =
+    minimetRaw.reports.metarReport.arrivalAtis.wind.wind2Min
+      .maximumWindDirection ?? 0;
+  const averageWindSpeed =
+    minimetRaw.reports.metarReport.arrivalAtis.wind.wind2Min.averageWindSpeed ??
+    0;
+  const maximumWindSpeed =
+    minimetRaw.reports.metarReport.arrivalAtis.wind.wind2Min.maximumWindSpeed ??
+    0;
 
   const sanitezedMetar = {
     site: minimetRaw.siteId,
@@ -51,9 +61,12 @@ function metarParser(minimetRaw: any): IMininetMetar {
     metar: minimetRaw.reports.metarReport.arrivalAtis.metReportString,
     designator: minimetRaw.reports.metarReport.arrivalAtis.codeLetter,
     runway: minimetRaw.reports.metarReport.arrivalAtis.runway,
-    temperature: minimetRaw.reports.metarReport.temperature.temperature.toString(),
+    temperature:
+      minimetRaw.reports.metarReport.temperature.temperature.toString(),
     dewPoint: minimetRaw.reports.metarReport.temperature.dewPoint.toString(),
-    visibility: minimetRaw.reports.metarReport.visibility.visibility?.toString() || "9999",
+    visibility:
+      minimetRaw.reports.metarReport.visibility.visibility?.toString() ||
+      "9999",
     clouds: CLOUDLAYERS.map((layer) => {
       if (minimetRaw.reports.metarReport.cloud[layer].type !== null) {
         return {
@@ -64,18 +77,16 @@ function metarParser(minimetRaw: any): IMininetMetar {
       }
       return null;
     }).filter((layer) => layer !== null),
-    windSpeed:
-      averageWindSpeed?.toString(),
-    windGust:
-      maximumWindSpeed?.toString(),
+    windSpeed: averageWindSpeed?.toString(),
+    windGust: maximumWindSpeed?.toString(),
     windDirection:
-      minimetRaw.reports.metarReport.arrivalAtis.wind.wind2Min
-        .averageWindDirection?.toString(),
-    windBetweenFrom:
-      minimumWindDirection.toString(),
-    windBetweenTo:
-      maximumWindDirection.toString(),
-    isWindVariable: maximumWindDirection - minimumWindDirection > 59 ? true : false,
+      minimetRaw.reports.metarReport.arrivalAtis.wind.wind2Min.averageWindDirection?.toString() || "0",
+    windBetweenFrom: minimumWindDirection.toString(),
+    windBetweenTo: maximumWindDirection.toString(),
+    isWindVariable:
+      minimetRaw.reports.metarReport.arrivalAtis.wind.wind2Min.isVrb,
+    isWindVarialeBetween:
+      maximumWindDirection - minimumWindDirection > 59 ? true : false,
     isWindGusting: maximumWindSpeed - averageWindSpeed > 9 ? true : false,
   };
   return sanitezedMetar;
@@ -95,6 +106,7 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
   fetch(minimetUrl, { headers, method: "POST" })
     .then((res) => res.json())
     .then((data) => {
+      console.log(metarParser(data));
       return res.status(200).json(metarParser(data));
     })
     .catch((err) => {
