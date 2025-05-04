@@ -86,7 +86,7 @@ function metarParser(minimetRaw: any): IMininetMetar {
     isWindVariable:
       minimetRaw.reports.metarReport.arrivalAtis.wind.wind2Min.isVrb,
     isWindVarialeBetween:
-      maximumWindDirection - minimumWindDirection > 59 ? true : false,
+      Math.abs(maximumWindDirection - minimumWindDirection) > 59 ? true : false,
     isWindGusting: maximumWindSpeed - averageWindSpeed > 9 ? true : false,
   };
   return sanitezedMetar;
