@@ -123,10 +123,10 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
     .then(([minimet, changeSince]) => {
       // Parse both responses
       const minimetMetar = metarParser(minimet);
-      const minimetRemarks = changeSince.values[0].value;
+      const minimetRemarks = changeSince.values[0].value || null;
 
       // Combine the results into a single object
-      const combinedResult = { minimetMetar, remarks: minimetRemarks };
+      const combinedResult = { ...minimetMetar, remarks: minimetRemarks };
 
       return res.status(200).json(combinedResult);
     })
