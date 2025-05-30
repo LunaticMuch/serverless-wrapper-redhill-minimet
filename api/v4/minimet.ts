@@ -62,8 +62,8 @@ function metarParser(minimetRaw: any): IMininetMetar {
     designator: minimetRaw.reports.metarReport.arrivalAtis.codeLetter,
     runway: minimetRaw.reports.metarReport.arrivalAtis.runway,
     temperature:
-      minimetRaw.reports.metarReport.temperature.temperature.toString(),
-    dewPoint: minimetRaw.reports.metarReport.temperature.dewPoint.toString(),
+      minimetRaw.reports.metarReport.temperature.temperature?.toString() || "N/A",
+    dewPoint: minimetRaw.reports.metarReport.temperature.dewPoint?.toString() || "N/A",
     visibility:
       minimetRaw.reports.metarReport.visibility.visibility?.toString() ||
       "9999",
