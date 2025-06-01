@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "incremental": true,
+    "noUncheckedIndexedAccess": true,
+    "strict": false,
+    "target":"esnext",
+    "moduleResolution": "node",
+  }
+}
