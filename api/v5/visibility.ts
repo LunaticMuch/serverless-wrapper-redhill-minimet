@@ -74,7 +74,7 @@ function processWeatherData(data) {
       timestamp: lastTimestamp,
       visibility:
         visibilityMeters !== null && visibilityMeters !== undefined
-          ? visibilityMeters
+          ? Math.round(visibilityMeters)
           : 0,
     });
   }
