@@ -33,7 +33,7 @@ function processWeatherData(data) {
       timestamp: currentTimestamp,
       visibility:
         visibilityMeters !== null && visibilityMeters !== undefined
-          ? visibilityMeters
+          ? Math.round(visibilityMeters)
           : 0,
     });
 
