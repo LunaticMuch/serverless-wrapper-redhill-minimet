@@ -39,40 +39,39 @@ interface IMininetMetar {
 
 function metarParser(minimetRaw: any): IMininetMetar {
   const minimumWindDirection =
-    minimetRaw.reports.metarReport.arrivalAtis.wind.wind2Min
-      .minimumWindDirection ?? 0;
+    minimetRaw.reports.metarReport?.arrivalAtis?.wind.wind2Min?.minimumWindDirection ?? 0 ;
   const maximumWindDirection =
-    minimetRaw.reports.metarReport.arrivalAtis.wind.wind2Min
+    minimetRaw.reports.metarReport?.arrivalAtis?.wind.wind2Min
       .maximumWindDirection ?? 0;
   const averageWindSpeed =
-    minimetRaw.reports.metarReport.arrivalAtis.wind.wind2Min.averageWindSpeed ??
+    minimetRaw.reports.metarReport?.arrivalAtis?.wind.wind2Min.averageWindSpeed ??
     0;
   const maximumWindSpeed =
-    minimetRaw.reports.metarReport.arrivalAtis.wind.wind2Min.maximumWindSpeed ??
+    minimetRaw.reports.metarReport?.arrivalAtis?.wind.wind2Min.maximumWindSpeed ??
     0;
 
   const sanitezedMetar = {
     site: minimetRaw.siteId,
-    isCavok: minimetRaw.reports.metarReport.cavok,
-    updatedOn: minimetRaw.reports.metarReport.time,
-    isAutomatic: minimetRaw.reports.metarReport.auto,
-    qnh: minimetRaw.reports.metarReport.qnh.toString(),
-    qfe: minimetRaw.reports.metarReport.airfieldQfe.toString(),
-    metar: minimetRaw.reports.metarReport.arrivalAtis.metReportString,
-    designator: minimetRaw.reports.metarReport.arrivalAtis.codeLetter,
-    runway: minimetRaw.reports.metarReport.arrivalAtis.runway,
+    isCavok: minimetRaw.reports.metarReport?.cavok,
+    updatedOn: minimetRaw.reports.metarReport?.time,
+    isAutomatic: minimetRaw.reports.metarReport?.auto,
+    qnh: minimetRaw.reports.metarReport?.qnh.toString(),
+    qfe: minimetRaw.reports.metarReport?.airfieldQfe.toString(),
+    metar: minimetRaw.reports.metarReport?.arrivalAtis?.metReportString,
+    designator: minimetRaw.reports.metarReport?.arrivalAtis?.codeLetter,
+    runway: minimetRaw.reports.metarReport?.arrivalAtis?.runway,
     temperature:
-      minimetRaw.reports.metarReport.temperature.temperature?.toString() || "N/A",
-    dewPoint: minimetRaw.reports.metarReport.temperature.dewPoint?.toString() || "N/A",
+      minimetRaw.reports.metarReport?.temperature.temperature?.toString() || "N/A",
+    dewPoint: minimetRaw.reports.metarReport?.temperature.dewPoint?.toString() || "N/A",
     visibility:
-      minimetRaw.reports.metarReport.visibility.visibility?.toString() ||
+      minimetRaw.reports.metarReport?.visibility.visibility?.toString() ||
       "9999",
     clouds: CLOUDLAYERS.map((layer) => {
-      if (minimetRaw.reports.metarReport.cloud[layer].type !== null) {
+      if (minimetRaw.reports.metarReport?.cloud[layer].type !== null && minimetRaw.reports.metarReport?.cloud[layer].type !== undefined) {
         return {
-          type: minimetRaw.reports.metarReport.cloud[layer].type,
-          height: minimetRaw.reports.metarReport.cloud[layer].height,
-          coverage: minimetRaw.reports.metarReport.cloud[layer].cover,
+          type: minimetRaw.reports.metarReport?.cloud[layer].type,
+          height: minimetRaw.reports.metarReport?.cloud[layer].height,
+          coverage: minimetRaw.reports.metarReport?.cloud[layer].cover,
         };
       }
       return null;
@@ -80,12 +79,12 @@ function metarParser(minimetRaw: any): IMininetMetar {
     windSpeed: averageWindSpeed?.toString(),
     windGust: maximumWindSpeed?.toString(),
     windDirection:
-      minimetRaw.reports.metarReport.arrivalAtis.wind.wind2Min.averageWindDirection?.toString() ||
+      minimetRaw.reports.metarReport?.arrivalAtis.wind.wind2Min.averageWindDirection?.toString() ||
       "0",
     windBetweenFrom: minimumWindDirection.toString(),
     windBetweenTo: maximumWindDirection.toString(),
     isWindVariable:
-      minimetRaw.reports.metarReport.arrivalAtis.wind.wind2Min.isVrb,
+      minimetRaw.reports.metarReport?.arrivalAtis.wind.wind2Min.isVrb,
     isWindVarialeBetween:
       Math.abs(maximumWindDirection - minimumWindDirection) > 59 ? true : false,
     isWindGusting: maximumWindSpeed - averageWindSpeed > 9 ? true : false,
